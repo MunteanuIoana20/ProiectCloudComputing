@@ -103,7 +103,8 @@ export default function Home() {
 
       <h2 className="text-2xl font-semibold mb-4">Notițele tale</h2>
       <ul className="space-y-4">
-        {notes.map((note: any) => (
+      {notes.map((note: { _id: string; title: string; content: string }) => (
+
           <li
             key={note._id}
             className="bg-purple-100 text-purple-900 rounded-lg p-4 shadow-md relative"
