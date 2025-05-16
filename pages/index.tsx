@@ -80,15 +80,17 @@ export default function Home() {
 
       <h2 className="text-xl font-semibold mt-6 mb-2">Notițele tale</h2>
       <ul className="space-y-2">
-        {notes.map((note: any) => (
-          <li key={note._id} className="border rounded p-3 bg-white shadow">
-            <h3 className="font-bold">{note.title}</h3>
-            <p>{note.content}</p>
-            <p className="text-sm text-gray-500">
-              {new Date(note.createdAt).toLocaleString()}
-            </p>
-          </li>
-        ))}
+      {notes && notes.length > 0 ? (
+  notes.map((note: any) => (
+    <li key={note._id} className="border rounded p-3 bg-white shadow">
+      <h3 className="font-bold">{note.title}</h3>
+      <p>{note.content}</p>
+    </li>
+  ))
+) : (
+  <p>Nu există notițe salvate încă.</p>
+)}
+
       </ul>
     </div>
   );
