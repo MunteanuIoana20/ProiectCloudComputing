@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
-  const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [title, setTitle] = useState("");
   const [notes, setNotes] = useState([]);
+  const [loadingTitle, setLoadingTitle] = useState(false);
+  const [loadingSave, setLoadingSave] = useState(false);
 
   const fetchNotes = async () => {
     const res = await fetch("/api/get-notes");
@@ -11,8 +13,32 @@ export default function Home() {
     setNotes(data.notes);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    fetchNotes();
+  }, []);
+
+  const generateTitle = async () => {
+    if (!content.trim()) {
+      alert("Scrie mai întâi conținutul notiței.");
+      return;
+    }
+    setLoadingTitle(true);
+    const res = await fetch("/api/generate-title", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content }),
+    });
+    const data = await res.json();
+    setTitle(data.title);
+    setLoadingTitle(false);
+  };
+
+  const saveNote = async () => {
+    if (!title.trim() || !content.trim()) {
+      alert("Titlul și conținutul nu pot fi goale.");
+      return;
+    }
+    setLoadingSave(true);
     await fetch("/api/save-note", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -20,6 +46,7 @@ export default function Home() {
     });
     setTitle("");
     setContent("");
+    setLoadingSave(false);
     fetchNotes();
   };
 
@@ -33,65 +60,66 @@ export default function Home() {
     fetchNotes();
   };
 
-  useEffect(() => {
-    fetchNotes();
-  }, []);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-white py-10 px-4">
-      <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-lg">
-        <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">📝 Aplicație Notițe</h1>
+    <div className="max-w-3xl mx-auto p-6">
+      <h1 className="text-4xl font-bold mb-6 text-center">Aplicație Notițe</h1>
+      
+      <textarea
+        rows={5}
+        placeholder="Scrie conținutul notiței aici..."
+        className="w-full p-4 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        disabled={loadingTitle || loadingSave}
+      />
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            placeholder="Titlul notiței"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-            required
-          />
-          <textarea
-            placeholder="Conținutul notiței"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-            required
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-6 py-2 rounded-xl hover:bg-blue-600 transition"
+<div className="mb-4 flex flex-col">
+  <button
+    onClick={generateTitle}
+    disabled={loadingTitle || !content.trim()}
+    className="w-40 px-4 py-2 mb-2 bg-purple-600 text-white rounded hover:bg-green-700 transition"
+  >
+    {loadingTitle ? "Se generează titlul..." : "Generează titlu"}
+  </button>
+
+  <input
+    type="text"
+    placeholder="Titlul generat va apărea aici"
+    value={title}
+    onChange={(e) => setTitle(e.target.value)}
+    className="w-full p-2 border rounded"
+    disabled={loadingSave}
+  />
+</div>
+
+
+      <button
+        onClick={saveNote}
+        disabled={loadingSave || !title.trim() || !content.trim()}
+        className="px-6 py-2 bg-purple-600 text-white rounded hover:bg-blue-700 transition mb-8"
+      >
+        {loadingSave ? "Se salvează..." : "Salvează Notița"}
+      </button>
+
+      <h2 className="text-2xl font-semibold mb-4">Notițele tale</h2>
+      <ul className="space-y-4">
+        {notes.map((note: any) => (
+          <li
+            key={note._id}
+            className="bg-purple-100 text-purple-900 rounded-lg p-4 shadow-md relative"
           >
-            Salvează Notița
-          </button>
-        </form>
-
-        <div className="mt-10">
-          <h2 className="text-xl font-semibold mb-4 text-gray-700">📚 Notițele tale</h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            {notes.map((note: any) => (
-              <div
-                key={note._id}
-                className="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm"
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-800">{note.title}</h3>
-                    <p className="text-gray-600">{note.content}</p>
-                  </div>
-                  <button
-                    onClick={() => handleDelete(note._id)}
-                    className="text-red-500 hover:text-red-700 text-sm ml-4"
-                    title="Șterge notița"
-                  >
-                    🗑️
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+            <button
+              onClick={() => handleDelete(note._id)}
+              className="absolute top-2 right-3 text-red-600 hover:text-red-800 font-bold text-xl"
+              title="Șterge notița"
+            >
+              &times;
+            </button>
+            <h3 className="font-bold text-lg mb-2">{note.title}</h3>
+            <p className="whitespace-pre-wrap">{note.content}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
