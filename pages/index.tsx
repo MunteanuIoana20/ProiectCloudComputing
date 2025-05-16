@@ -23,6 +23,16 @@ export default function Home() {
     fetchNotes();
   };
 
+  const handleDelete = async (id: string) => {
+    if (!confirm("Sigur vrei să ștergi această notiță?")) return;
+    await fetch("/api/delete-note", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    fetchNotes();
+  };
+
   useEffect(() => {
     fetchNotes();
   }, []);
@@ -60,9 +70,23 @@ export default function Home() {
           <h2 className="text-xl font-semibold mb-4 text-gray-700">📚 Notițele tale</h2>
           <div className="grid md:grid-cols-2 gap-4">
             {notes.map((note: any) => (
-              <div key={note._id} className="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm">
-                <h3 className="text-lg font-bold text-gray-800">{note.title}</h3>
-                <p className="text-gray-600">{note.content}</p>
+              <div
+                key={note._id}
+                className="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm"
+              >
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-800">{note.title}</h3>
+                    <p className="text-gray-600">{note.content}</p>
+                  </div>
+                  <button
+                    onClick={() => handleDelete(note._id)}
+                    className="text-red-500 hover:text-red-700 text-sm ml-4"
+                    title="Șterge notița"
+                  >
+                    🗑️
+                  </button>
+                </div>
               </div>
             ))}
           </div>
