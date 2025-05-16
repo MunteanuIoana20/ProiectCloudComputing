@@ -28,7 +28,7 @@ Aceasta este o aplicație web de notițe creată cu Next.js, care permite utiliz
 3. Creează un fișier .env.local în rădăcina proiectului și adaugă variabilele de mediu:
     ```ini
     MONGODB_URI=mongodb+srv://cristinaioana16012001:CloudComputing@notesdb.bkozdv0.mongodb.net/notesdb?retryWrites=true&w=majority&appName=notesdb
-    OPENAI_API_KEY=***REMOVED***
+    OPENAI_API_KEY=your_openai_api_key
 4. Rulează aplicația:
     ```bash
     npm run dev
