@@ -3,19 +3,13 @@ import { MongoClient } from "mongodb";
 const uri = process.env.MONGODB_URI!;
 const options = {};
 
-declare global {
-  // eslint-disable-next-line no-var
-  var _mongoClientPromise: Promise<MongoClient> | undefined;
-}
+let client;
 
-let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
-
-if (!global._mongoClientPromise) {
+if (!globalThis._mongoClientPromise) {
   client = new MongoClient(uri, options);
-  (global as any)._mongoClientPromise = client.connect();
+  globalThis._mongoClientPromise = client.connect();
 }
 
-clientPromise = global._mongoClientPromise!;
+const clientPromise: Promise<MongoClient> = globalThis._mongoClientPromise!;
 
 export default clientPromise;
