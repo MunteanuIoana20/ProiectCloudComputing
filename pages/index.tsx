@@ -58,28 +58,33 @@ export default function Home() {
   };
 
   const saveEdit = async () => {
-    if (!editingId) return;
-    if (!(title ?? "").trim() || !(content ?? "").trim()) {
-      alert("Titlul și conținutul nu pot fi goale.");
-      return;
-    }
-    setLoadingSave(true);
-    try {
-      const res = await fetch("/api/edit-note", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: editingId, newContent: content, newTitle: title }),
-      });
-      if (!res.ok) throw new Error("Eroare la salvarea modificărilor");
-      setEditingId(null);
-      setTitle("");
-      setContent("");
-      fetchNotes();
-    } catch (error: any) {
+  if (!editingId) return;
+  if (!(title ?? "").trim() || !(content ?? "").trim()) {
+    alert("Titlul și conținutul nu pot fi goale.");
+    return;
+  }
+  setLoadingSave(true);
+  try {
+    const res = await fetch("/api/edit-note", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: editingId, newContent: content, newTitle: title }),
+    });
+    if (!res.ok) throw new Error("Eroare la salvarea modificărilor");
+    setEditingId(null);
+    setTitle("");
+    setContent("");
+    fetchNotes();
+  } catch (error) {
+    if (error instanceof Error) {
       alert(error.message);
+    } else {
+      alert("A apărut o eroare necunoscută.");
     }
-    setLoadingSave(false);
-  };
+  }
+  setLoadingSave(false);
+};
+
 
   const handleDelete = async (id: string) => {
     if (!confirm("Sigur vrei să ștergi această notiță?")) return;

@@ -36,11 +36,16 @@ export default async function handler(
       completion.choices?.[0]?.message?.content?.trim() || 'Titlu generat';
 
     res.status(200).json({ title });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Eroare OpenAI:', error);
 
-    // Mesaj mai detaliat dacă e o problemă cu cheia
-    if (error.status === 401 || error.code === 'invalid_api_key') {
+    // Verificăm dacă error este un obiect Error cu proprietăți cunoscute
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      'status' in error &&
+      (error as any).status === 401
+    ) {
       return res
         .status(500)
         .json({ error: 'Cheia API este invalidă sau a expirat' });
