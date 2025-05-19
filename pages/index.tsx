@@ -6,6 +6,7 @@ export default function Home() {
   const [notes, setNotes] = useState([]);
   const [loadingTitle, setLoadingTitle] = useState(false);
   const [loadingSave, setLoadingSave] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const fetchNotes = async () => {
     const res = await fetch("/api/get-notes");
@@ -50,6 +51,36 @@ export default function Home() {
     fetchNotes();
   };
 
+  const startEditing = (note: { _id: string; title: string; content: string }) => {
+    setEditingId(note._id);
+    setTitle(note.title);
+    setContent(note.content);
+  };
+
+  const saveEdit = async () => {
+    if (!editingId) return;
+    if (!(title ?? "").trim() || !(content ?? "").trim()) {
+      alert("Titlul și conținutul nu pot fi goale.");
+      return;
+    }
+    setLoadingSave(true);
+    try {
+      const res = await fetch("/api/edit-note", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: editingId, newContent: content, newTitle: title }),
+      });
+      if (!res.ok) throw new Error("Eroare la salvarea modificărilor");
+      setEditingId(null);
+      setTitle("");
+      setContent("");
+      fetchNotes();
+    } catch (error: any) {
+      alert(error.message);
+    }
+    setLoadingSave(false);
+  };
+
   const handleDelete = async (id: string) => {
     if (!confirm("Sigur vrei să ștergi această notiță?")) return;
     await fetch("/api/delete-note", {
@@ -63,7 +94,7 @@ export default function Home() {
   return (
     <div className="max-w-3xl mx-auto p-6">
       <h1 className="text-4xl font-bold mb-6 text-center">Aplicație Notițe</h1>
-      
+
       <textarea
         rows={5}
         placeholder="Scrie conținutul notiței aici..."
@@ -93,11 +124,15 @@ export default function Home() {
       </div>
 
       <button
-        onClick={saveNote}
-        disabled={loadingSave || !(title ?? "").trim() || !(content ?? "").trim()}
+        onClick={editingId ? saveEdit : saveNote}
+        disabled={
+          loadingSave ||
+          !(title ?? "").trim() ||
+          !(content ?? "").trim()
+        }
         className="px-6 py-2 bg-purple-600 text-white rounded hover:bg-blue-700 transition mb-8"
       >
-        {loadingSave ? "Se salvează..." : "Salvează Notița"}
+        {loadingSave ? "Se salvează..." : editingId ? "Salvează Modificările" : "Salvează Notița"}
       </button>
 
       <h2 className="text-2xl font-semibold mb-4">Notițele tale</h2>
@@ -114,6 +149,15 @@ export default function Home() {
             >
               &times;
             </button>
+
+            <button
+              onClick={() => startEditing(note)}
+              className="absolute top-2 right-10 text-blue-600 hover:text-blue-800 font-bold text-lg"
+              title="Editează notița"
+            >
+              &#9998;
+            </button>
+
             <h3 className="font-bold text-lg mb-2">{(note.title ?? "").trim() || "Fără titlu"}</h3>
             <p className="whitespace-pre-wrap">{(note.content ?? "").trim() || "Fără conținut"}</p>
           </li>

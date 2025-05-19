@@ -7,9 +7,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Metoda HTTP nu este permisă' });
   }
 
-  const { id, newContent } = req.body;
+  const { id, newContent, newTitle } = req.body;
 
-  if (!id || !newContent || typeof newContent !== 'string') {
+  if (!id || !newContent || typeof newContent !== 'string' || !newTitle || typeof newTitle !== 'string') {
     return res.status(400).json({ error: 'Date invalide' });
   }
 
@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const db = client.db('notesdb');
     const result = await db.collection('notes').updateOne(
       { _id: new ObjectId(id) },
-      { $set: { content: newContent, updatedAt: new Date() } }
+      { $set: { content: newContent, title: newTitle, updatedAt: new Date() } }
     );
 
     if (result.modifiedCount === 1) {
