@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!, 
+  apiKey: process.env.OPENAI_API_KEY!,
 });
 
 export default async function handler(
@@ -36,15 +36,14 @@ export default async function handler(
       completion.choices?.[0]?.message?.content?.trim() || 'Titlu generat';
 
     res.status(200).json({ title });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Eroare OpenAI:', error);
 
-    // Verificăm dacă error este un obiect Error cu proprietăți cunoscute
     if (
       typeof error === 'object' &&
       error !== null &&
       'status' in error &&
-      (error as any).status === 401
+      (error as { status?: number }).status === 401
     ) {
       return res
         .status(500)
