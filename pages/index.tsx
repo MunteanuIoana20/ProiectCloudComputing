@@ -18,7 +18,7 @@ export default function Home() {
   }, []);
 
   const generateTitle = async () => {
-    if (!content.trim()) {
+    if (!(content ?? "").trim()) {
       alert("Scrie mai întâi conținutul notiței.");
       return;
     }
@@ -29,12 +29,12 @@ export default function Home() {
       body: JSON.stringify({ content }),
     });
     const data = await res.json();
-    setTitle(data.title);
+    setTitle(data.title ?? "");
     setLoadingTitle(false);
   };
 
   const saveNote = async () => {
-    if (!title.trim() || !content.trim()) {
+    if (!(title ?? "").trim() || !(content ?? "").trim()) {
       alert("Titlul și conținutul nu pot fi goale.");
       return;
     }
@@ -73,29 +73,28 @@ export default function Home() {
         disabled={loadingTitle || loadingSave}
       />
 
-<div className="mb-4 flex flex-col">
-  <button
-    onClick={generateTitle}
-    disabled={loadingTitle || !content.trim()}
-    className="w-40 px-4 py-2 mb-2 bg-purple-600 text-white rounded hover:bg-green-700 transition"
-  >
-    {loadingTitle ? "Se generează titlul..." : "Generează titlu"}
-  </button>
+      <div className="mb-4 flex flex-col">
+        <button
+          onClick={generateTitle}
+          disabled={loadingTitle || !(content ?? "").trim()}
+          className="w-40 px-4 py-2 mb-2 bg-purple-600 text-white rounded hover:bg-green-700 transition"
+        >
+          {loadingTitle ? "Se generează titlul..." : "Generează titlu"}
+        </button>
 
-  <input
-    type="text"
-    placeholder="Titlul generat va apărea aici"
-    value={title}
-    onChange={(e) => setTitle(e.target.value)}
-    className="w-full p-2 border rounded"
-    disabled={loadingSave}
-  />
-</div>
-
+        <input
+          type="text"
+          placeholder="Titlul generat va apărea aici"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full p-2 border rounded"
+          disabled={loadingSave}
+        />
+      </div>
 
       <button
         onClick={saveNote}
-        disabled={loadingSave || !title.trim() || !content.trim()}
+        disabled={loadingSave || !(title ?? "").trim() || !(content ?? "").trim()}
         className="px-6 py-2 bg-purple-600 text-white rounded hover:bg-blue-700 transition mb-8"
       >
         {loadingSave ? "Se salvează..." : "Salvează Notița"}
@@ -103,8 +102,7 @@ export default function Home() {
 
       <h2 className="text-2xl font-semibold mb-4">Notițele tale</h2>
       <ul className="space-y-4">
-      {notes.map((note: { _id: string; title: string; content: string }) => (
-
+        {notes.map((note: { _id: string; title: string; content: string }) => (
           <li
             key={note._id}
             className="bg-purple-100 text-purple-900 rounded-lg p-4 shadow-md relative"
@@ -116,8 +114,8 @@ export default function Home() {
             >
               &times;
             </button>
-            <h3 className="font-bold text-lg mb-2">{note.title}</h3>
-            <p className="whitespace-pre-wrap">{note.content}</p>
+            <h3 className="font-bold text-lg mb-2">{(note.title ?? "").trim() || "Fără titlu"}</h3>
+            <p className="whitespace-pre-wrap">{(note.content ?? "").trim() || "Fără conținut"}</p>
           </li>
         ))}
       </ul>

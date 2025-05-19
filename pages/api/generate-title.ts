@@ -1,16 +1,24 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import OpenAI from 'openai'; 
+import type { NextApiRequest, NextApiResponse } from 'next';
+import OpenAI from 'openai';
+
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,  
+  apiKey: process.env.OPENAI_API_KEY!, 
 });
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') return res.status(405).end();
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Metoda HTTP nu este permisă' });
+  }
 
   const { content } = req.body;
 
-  if (!content || content.trim() === '') {
-    return res.status(400).json({ error: 'Conținutul este necesar.' });
+  if (!content || typeof content !== 'string' || !content.trim()) {
+    return res
+      .status(400)
+      .json({ error: 'Conținutul notiței este invalid sau gol' });
   }
 
   try {
@@ -18,22 +26,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       model: 'gpt-3.5-turbo',
       messages: [
         {
-          role: 'system',
-          content: 'Generează un titlu scurt și sugestiv pentru o notiță scrisă de un utilizator.',
-        },
-        {
           role: 'user',
-          content,
+          content: `Generează un titlu scurt și relevant pentru această notiță: "${content.trim()}"`,
         },
       ],
-      max_tokens: 20,
     });
 
-    const title = completion.choices[0].message?.content?.trim();
+    const title =
+      completion.choices?.[0]?.message?.content?.trim() || 'Titlu generat';
 
     res.status(200).json({ title });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Eroare OpenAI:', error);
-    res.status(500).json({ error: 'Eroare la generarea titlului.' });
+
+    // Mesaj mai detaliat dacă e o problemă cu cheia
+    if (error.status === 401 || error.code === 'invalid_api_key') {
+      return res
+        .status(500)
+        .json({ error: 'Cheia API este invalidă sau a expirat' });
+    }
+
+    res.status(500).json({ error: 'Eroare la generarea titlului' });
   }
 }
