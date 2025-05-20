@@ -16,11 +16,11 @@ Aplicația propusă adresează direct această problemă prin integrarea unui si
 
 # Descriere API
 Aplicația expune un API REST cu următoarele endpoint-uri principale:
--**POST /api/generate-title – primește conținutul unei notițe și returnează un titlu generat automat folosind OpenAI.
--**GET /api/get-notes – returnează toate notițele salvate în baza de date.
--**POST /api/save-note – salvează o notiță nouă cu titlu și conținut.
--**PUT /api/edit-note – modifică o notiță existentă după ID, actualizând titlul și conținutul.
--**DELETE /api/delete-note – șterge o notiță după ID.
+- **POST /api/generate-title – primește conținutul unei notițe și returnează un titlu generat automat folosind OpenAI.
+- **GET /api/get-notes – returnează toate notițele salvate în baza de date.
+- **POST /api/save-note – salvează o notiță nouă cu titlu și conținut.
+- **PUT /api/edit-note – modifică o notiță existentă după ID, actualizând titlul și conținutul.
+- **DELETE /api/delete-note – șterge o notiță după ID.
 
 # Flux de date
 -**Exemple request / response
@@ -54,8 +54,7 @@ Response:
 ## Autentificare și autorizare
 Am ales să nu implementez un mecanism de autentificare și autorizare deoarece aplicatia este destinată uzului personal.
 ## Capturi ecran aplicație
- 
- 
+ ![1](C:\Users\crist\OneDrive\Documente\Desktop\ProiectCloudComputing\capturi_aplicatie\1.png)
 
  
  
