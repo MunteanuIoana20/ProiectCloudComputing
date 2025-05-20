@@ -1,7 +1,7 @@
 # Aplicație Notițe, Munteanu Cristina-Ioana, 1133
 Link:
-	Prezentare video proiect: https://youtu.be/iywF8nAr1YY
-	Publicare proiect: proiect-cloud-computing-rlrm.vercel.app
+## Prezentare video proiect: https://youtu.be/iywF8nAr1YY
+## Publicare proiect: proiect-cloud-computing-rlrm.vercel.app
 
 ## Introducere
 Această aplicație web permite utilizatorilor să gestioneze eficient notițele personale printr-o interfață intuitivă și modernă. Utilizatorii pot crea, edita și șterge notițe direct din interfață, iar pentru a îmbunătăți experiența de utilizare, aplicația folosește capabilitățile platformei OpenAI pentru a genera titluri sugestive automat, în funcție de conținutul introdus.
@@ -22,40 +22,37 @@ Aplicația expune un API REST cu următoarele endpoint-uri principale:
 ->PUT /api/edit-note – modifică o notiță existentă după ID, actualizând titlul și conținutul.
 ->DELETE /api/delete-note – șterge o notiță după ID.
 
-4.	Flux de date
+## Flux de date
 ->Exemple request / response
-a)Generate Title
+# Generate Title
 Request:
-```bash
+=
 POST /api/generate-title
 {
   "content": "Aceasta este o notiță despre cloud computing și beneficiile sale."
 }
 Response:
-```bash
 {
   "title": "Beneficiile Cloud Computing"
 }
-b)Save Note
+# Save Note
 Request:
-```bash
 POST /api/save-note
 {
   "title": "Beneficiile Cloud Computing",
   "content": "Aceasta este o notiță despre cloud computing și beneficiile sale."
 }
 Response:
-```bash
 {
   "message": "Notița a fost salvată cu succes."
 }
-->Metode HTTP utilizate
+# Metode HTTP utilizate
 -POST pentru crearea și generarea titlurilor notițelor.
 -GET pentru preluarea listelor de notițe.
 -PUT pentru modificarea notițelor existente.
 -DELETE pentru ștergerea notițelor.
 
-->Autentificare și autorizare
+# Autentificare și autorizare
 Am ales să nu implementez un mecanism de autentificare și autorizare deoarece aplicatia este destinată uzului personal.
 ## Capturi ecran aplicație
  
