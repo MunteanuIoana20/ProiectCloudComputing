@@ -16,14 +16,14 @@ Aplicația propusă adresează direct această problemă prin integrarea unui si
 
 # Descriere API
 Aplicația expune un API REST cu următoarele endpoint-uri principale:
-->POST /api/generate-title – primește conținutul unei notițe și returnează un titlu generat automat folosind OpenAI.
-->GET /api/get-notes – returnează toate notițele salvate în baza de date.
-->POST /api/save-note – salvează o notiță nouă cu titlu și conținut.
-->PUT /api/edit-note – modifică o notiță existentă după ID, actualizând titlul și conținutul.
-->DELETE /api/delete-note – șterge o notiță după ID.
+-**POST /api/generate-title – primește conținutul unei notițe și returnează un titlu generat automat folosind OpenAI.
+-**GET /api/get-notes – returnează toate notițele salvate în baza de date.
+-**POST /api/save-note – salvează o notiță nouă cu titlu și conținut.
+-**PUT /api/edit-note – modifică o notiță existentă după ID, actualizând titlul și conținutul.
+-**DELETE /api/delete-note – șterge o notiță după ID.
 
 # Flux de date
-->Exemple request / response
+-**Exemple request / response
 ## Generate Title
 Request:
 POST /api/generate-title
@@ -46,10 +46,10 @@ Response:
   "message": "Notița a fost salvată cu succes."
 }
 ## Metode HTTP utilizate
--POST pentru crearea și generarea titlurilor notițelor.
--GET pentru preluarea listelor de notițe.
--PUT pentru modificarea notițelor existente.
--DELETE pentru ștergerea notițelor.
+- **POST pentru crearea și generarea titlurilor notițelor.
+- **GET pentru preluarea listelor de notițe.
+- **PUT pentru modificarea notițelor existente.
+- **DELETE pentru ștergerea notițelor.
 
 ## Autentificare și autorizare
 Am ales să nu implementez un mecanism de autentificare și autorizare deoarece aplicatia este destinată uzului personal.
@@ -60,10 +60,10 @@ Am ales să nu implementez un mecanism de autentificare și autorizare deoarece 
  
  
 ## Referințe
-- **Next.js Documentation
-- **MongoDB Atlas
-- **OpenAI API Documentation
-- **Tailwind CSS
+- Next.js Documentation
+- MongoDB Atlas
+- OpenAI API Documentation
+- Tailwind CSS
 
 ## Tehnologii folosite
 - **Next.js**: Framework React pentru dezvoltare web rapidă și performantă.
