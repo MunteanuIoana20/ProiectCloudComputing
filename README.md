@@ -55,9 +55,9 @@ Response:
 Am ales să nu implementez un mecanism de autentificare și autorizare deoarece aplicatia este destinată uzului personal.
 ## Capturi ecran aplicație
 ![Interfata](./capturi_aplicatie/1.png)
-![Lista notite](./capturi_aplicatie/1.png)
-![Editare](./capturi_aplicatie/1.png)
-![BD](./capturi_aplicatie/1.png)
+![Lista notite](./capturi_aplicatie/2.png)
+![Editare](./capturi_aplicatie/3.png)
+![BD](./capturi_aplicatie/4.png)
  
 ## Referințe
 - Next.js Documentation
