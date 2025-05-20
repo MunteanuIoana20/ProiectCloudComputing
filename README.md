@@ -54,9 +54,10 @@ Response:
 ## Autentificare și autorizare
 Am ales să nu implementez un mecanism de autentificare și autorizare deoarece aplicatia este destinată uzului personal.
 ## Capturi ecran aplicație
- ![1](C:\Users\crist\OneDrive\Documente\Desktop\ProiectCloudComputing\capturi_aplicatie\1.png)
-
- 
+![Interfata](.\capturi_aplicatie\1.png)
+![Lista notite](.\capturi_aplicatie\1.png)
+![Editare](.\capturi_aplicatie\1.png)
+![BD](.\capturi_aplicatie\1.png)
  
 ## Referințe
 - Next.js Documentation
